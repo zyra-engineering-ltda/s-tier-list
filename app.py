@@ -14,12 +14,12 @@ from pathlib import Path
 
 # ── Third-party ────────────────────────────────────────────────────────────────
 import requests
-from flask import Flask, render_template, request, send_file, abort, url_for
+from flask import Flask, render_template, request, send_file, abort, url_for, redirect
 from PIL import Image, ImageDraw, ImageFont
 
 # ── Local modules ──────────────────────────────────────────────────────────────
-from auth import start_auth, complete_auth  # remove if not used
-# from jinja2.runtime import Undefined      # uncomment only if you reference it
+from auth import start_auth, complete_auth
+from jinja2.runtime import Undefined
 
 
 app = Flask(__name__)
