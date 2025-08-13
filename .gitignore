@@ -25,6 +25,9 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+cover_cache/
+auth_files/
+generated/
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -205,3 +208,8 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+
+.DS_Store
+*/.DS_Store
+*/*/.DS_Store

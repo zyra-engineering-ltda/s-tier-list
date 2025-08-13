@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="dungeon-err white" aria-labelledby="title-500">
+  <header class="derr-header">
+    <h2 id="title-500">SYSTEM FAILURE: Ah, Fudge...</h2>
+    <p class="derr-subtitle">The dungeon engine has misfired in spectacular fashion.</p>
+  </header>
+
+  <article class="derr-body">
+    <div class="derr-grid">
+      <div class="derr-art">
+        <img src="{{ url_for('static', filename='img/500.png') }}"
+             alt="Robot sadly looking at a bowl of fudge with text 'Ah, Fudge'" class="derr-img" />
+      </div>
+      <div class="derr-text">
+        <p><strong>NOTIFICATION:</strong> The System has encountered a critical hiccup, right in the middle of your quest.</p>
+        <p>It’s sitting here, staring at a bowl of fudge, muttering “ah fudge” instead of processing your request.</p>
+        <p><strong>ADVICE:</strong> Try again in a bit. Or feed the System chocolate. That might help.</p>
+        <div class="derr-actions">
+          <a href="{{ url_for('login') }}" class="btn btn-primary derr-btn">Return to Home</a>
+          <button class="btn derr-btn" type="button" onclick="location.reload()">Retry</button>
+        </div>
+        <p class="derr-footnote">Error <strong>500</strong> — Even the System needs a snack break sometimes.</p>
+      </div>
+    </div>
+  </article>
+</section>
+
+<style>
+  .dungeon-err { max-width: 1000px; margin: 2rem auto; padding: 1.5rem; border: 2px solid #333; border-radius: 12px; }
+  .derr-header { border-bottom: 1px dashed #444; margin-bottom: 1rem; padding-bottom: .5rem; }
+  .derr-subtitle { color: #666; margin: .25rem 0 0; }
+  .derr-grid { display: grid; gap: 1.25rem; grid-template-columns: 1fr 1fr; align-items: start; }
+  .derr-img { width: 100%; height: auto; border-radius: .5rem; border: 1px solid #444; }
+  .derr-text p { line-height: 1.6; }
+  .derr-actions { display: flex; gap: .75rem; margin-top: .75rem; flex-wrap: wrap; }
+  .derr-btn { border: 2px solid #222; }
+  .derr-footnote { color: #555; margin-top: .75rem; }
+  @media (max-width: 820px) { .derr-grid { grid-template-columns: 1fr; } }
+</style>
+{% endblock %}

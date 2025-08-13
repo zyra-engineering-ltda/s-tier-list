@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="reward-system white" aria-labelledby="reward-title">
+  <header class="rw-header">
+    <h2 id="reward-title">QUEST COMPLETE: Loot Awarded</h2>
+    <p class="rw-subtitle">Crawler, your ranking has been forged. Claim your spoils.</p>
+  </header>
+
+  <article class="rw-body">
+    <p><strong>SYSTEM NOTICE:</strong> Inside the chest you’ll find:
+      <ul>
+        <li><code>litrpg_tier_list.png</code> — your tier collage</li>
+        <li><code>submission.json</code> — a copy of your selections</li>
+      </ul>
+    </p>
+
+    <a href="{{ download_url }}" class="rw-chest" aria-label="Download reward zip">
+      <img
+        src="{{ url_for('static', filename='img/reward_chest.png') }}"
+        alt="Treasure chest gleaming with loot"
+        class="rw-img"
+      />
+      <span class="rw-cta">Click the Chest to Claim Your Loot (.zip)</span>
+    </a>
+
+    <p class="rw-footnote">If nothing happens, <a href="{{ download_url }}">click here</a>.</p>
+  </article>
+</section>
+
+<style>
+  .reward-system { max-width: 900px; margin: 2rem auto; padding: 1.5rem; border: 2px solid #333; border-radius: 12px; }
+  .rw-header { border-bottom: 1px dashed #444; margin-bottom: 1rem; padding-bottom: .5rem; }
+  .rw-subtitle { color: #666; margin: .25rem 0 0; }
+  .rw-body p, .rw-body li { line-height: 1.6; }
+  .rw-chest { display: grid; gap: .5rem; justify-items: center; text-decoration: none; margin-top: 1rem; }
+  .rw-img { max-width: 420px; width: 100%; height: auto; border-radius: .5rem; border: 1px solid #444; transition: transform .15s ease; }
+  .rw-chest:hover .rw-img { transform: scale(1.02); }
+  .rw-cta { font-weight: 700; border: 2px solid #222; padding: .5rem .75rem; border-radius: .5rem; background: #f3f3f3; color: inherit; }
+  .rw-footnote { color: #555; margin-top: .75rem; }
+</style>
+{% endblock %}

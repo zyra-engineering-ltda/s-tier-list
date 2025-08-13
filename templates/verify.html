@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="dungeon-system white" aria-labelledby="ds-title">
+  <header class="ds-header">
+    <h2 id="ds-title">Enter Audible Verification Code</h2>
+    <p class="ds-subtitle">The Final Seal Before the Vault Opens</p>
+  </header>
+
+  <article class="ds-body">
+    <p><strong>SYSTEM NOTICE:</strong><br>
+      Crawler, you have made it this far — past the login guardians and through the labyrinth of bureaucracy. 
+      One last lock bars your way: the <em>Verification Gate</em>.
+    </p>
+
+    <p><strong>YOUR TASK:</strong><br>
+      Retrieve the sacred digits from your chosen channel — the OTP (2FA) from your Authenticator App or the CVF code sent via Email/SMS — 
+      and inscribe them below before the sands in the hourglass run dry.
+    </p>
+
+    <form method="POST" class="ds-form" id="verificationForm" novalidate>
+      <div class="form-group ds-form-group">
+        <label for="code_type" class="ds-label">Verification Code Type</label>
+        <select id="code_type" name="code_type" class="form-control ds-select" required>
+          <option value="otp" selected>OTP (2FA)</option>
+        </select>
+      </div>
+
+      <div class="form-group ds-form-group">
+        <label for="code" class="ds-label">Verification Code</label>
+        <input
+          id="code"
+          type="text"
+          name="code"
+          class="form-control ds-input"
+          placeholder="Enter your code here"
+          required
+        />
+      </div>
+
+      <button type="submit" class="btn btn-primary ds-button">Verify</button>
+      <p class="ds-footnote">Complete this step and the dungeon shall reveal your hoard.</p>
+    </form>
+  </article>
+</section>
+
+<style>
+  .dungeon-system { max-width: 700px; margin: 2rem auto; padding: 1.5rem; border: 2px solid #333; border-radius: 10px; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; }
+  .ds-header { border-bottom: 1px dashed #444; margin-bottom: 1rem; padding-bottom: .5rem; }
+  .ds-header h2 { margin: 0; letter-spacing: .02em; }
+  .ds-subtitle { color: #666; margin: .25rem 0 0; }
+  .ds-body p { line-height: 1.6; }
+  .ds-form-group { margin-bottom: 1rem; }
+  .ds-label { font-weight: 600; margin-bottom: .25rem; display: inline-block; }
+  .ds-input, .ds-select { padding: .6rem .75rem; }
+  .ds-button { margin-top: .5rem; }
+  .ds-footnote { margin-top: .75rem; color: #555; }
+</style>
+
+<script>
+  document.getElementById('verificationForm')?.addEventListener('submit', function () {
+    const btn = this.querySelector('button[type="submit"]');
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = 'Verifying…';
+    }
+  });
+</script>
+{% endblock %}

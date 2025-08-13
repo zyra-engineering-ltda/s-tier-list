@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hspacer"></div>
+{# ---------- Reusable config ---------- #}
+{% set RANKS = [
+    ('S', 'S'),
+    ('A', 'A'),
+    ('B', 'B'),
+    ('C', 'C'),
+    ('D', 'D'),
+    ('F', 'F'),
+    ('DNF', 'Did Not Finish'),
+    ('ITP', 'Into the pit')
+] %}
+
+{# Optional: pass in a dict `ranks` from your view like {book_id: 'A', ...} to preselect #}
+{% if ranks is not defined %}
+{% set ranks = {} %}
+{% endif %}
+
+{# ---------- Reusable macro(s) ---------- #}
+{% macro rank_select(book_id, selected='') -%}
+<label class="ds-rank-label" for="rank-{{ book_id }}">Tier</label>
+<select id="rank-{{ book_id }}" name="ranks[{{ book_id }}]" class="ds-rank-select" data-book-id="{{ book_id }}">
+    <option value="" disabled {{ 'selected' if not selected else '' }}>None</option>
+    {% for val, label in RANKS %}
+    <option value="{{ val }}" {{ 'selected' if val==selected else '' }}>{{ label }}</option>
+    {% endfor %}
+</select>
+{%- endmacro %}
+
+<section class="dungeon-system  white" aria-labelledby="ds-title">
+    <header class="ds-header">
+        <h2 id="ds-title">SYSTEM UPDATE</h2>
+        <p class="ds-subtitle">Authentication Complete • Ranking Protocol Armed</p>
+    </header>
+
+    <article class="ds-body">
+        <p>
+            Well done, <strong>Crawler</strong>. Against all odds (and my expectations), you have successfully navigated
+            the perilous labyrinth of authentication.
+            You didn’t trip a single trap… that I’ll admit to.
+        </p>
+        <p>
+            Below is your hoard: the <strong>LitRPG library</strong>—and a few genre strays that survived the sorting
+            room.
+            Assign ranks, then press <strong>Generate</strong> to witness the dungeon forge your rankings into images.
+        </p>
+
+        <h3>Your Quest</h3>
+        <ol>
+            <li><strong>Assign ranks</strong> to each tome worthy of judgment.</li>
+            <li>When ready, press <strong>Generate</strong>.</li>
+            <li>Behold the dungeon’s artistry: a visual tapestry of your Book Rank List.</li>
+        </ol>
+
+        <form method="POST" class="ds-form" id="tierForm" novalidate action="{{ url_for('generate_rank_image') }}">
+        <div class="ds-library" role="region" aria-label="LitRPG Library">
+            {# Sort first, then filter inside to keep your original condition semantics #}
+            {% for key, value in profile.items() %}
+            {% for item in value | sort(attribute='purchase_date', reverse=true) %}
+            {% set subject_list = item.thesaurus_subject_keywords or [] %}
+            {% if item.status == 'Active' and 'literature-and-fiction' in subject_list %}
+            {# Choose a stable book_id (prefer asin, fallback to publication_id, id, or loop index) #}
+            {% set book_id = item.asin %}
+
+            {#
+            <pre>{{ item | pretty_json}}</pre>
+            #}
+            <div class="ds-book" data-book-id="{{ book_id }}">
+                <div class="ds-book-main">
+                    <h4 class="ds-title text-muted" style="font-size: medium;"><span class="publication">{{ item.publication_name }}</span></h4>
+                    <h2 class="ds-title"><span class="title">{{ item.title }}</span></h2>
+                    <input type="hidden" value="{{ item.title }}" id="{{ book_id }}-title" name="{{ book_id }}-title" data-book-id="{{ book_id }}" />
+                    <span class="summary">{{ item.merchandising_summary | safe }}</span><br />
+                    <span class="summary">{{ item.publisher_name }} - {{ item.runtime_length_min | to_hours }}</span><br />
+                    <span class="summary">Released: {{ item.release_date | format_iso }}</span><br />
+                    <span class="summary">Purchased: {{ item.purchase_date | format_iso }}</span><br />
+                </div>
+
+                <div class="ds-book-media">
+                    {% set decoded = item.product_images | from_json | default({}, true) %}
+                    {% for url in decoded.values() %}
+                    <img src="{{ url }}" alt="Cover image for {{ item.publication_name }}" style="max-width: 250px;" />
+                    <input type="hidden" value="{{ url }}" name="{{ book_id }}-url" id="{{ book_id }}-url" data-book-id="{{ book_id }}" />
+                    {% endfor %}
+                </div>
+
+                <div class="ds-book-rank">
+                    {{ rank_select(book_id, ranks.get(book_id, '')) }}
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% endfor %}
+        </div>
+        <div class="ds-actions">
+            <button id="generateRankings" type="submit" class="btn btn-primary">Generate</button>
+            <p class="ds-footnote">Go on, make it beautiful… or at least entertaining.</p>
+        </div>
+    </form>
+
+
+    </article>
+</section>
+
+{# ---------- Minimal styles (optional) ---------- #}
+<style>
+    .dungeon-system {
+        max-width: 1100px;
+        margin: 2rem auto;
+        padding: 1.5rem;
+        border: 2px solid #333;
+        border-radius: 10px;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    }
+
+    .ds-header {
+        border-bottom: 1px dashed #444;
+        margin-bottom: 1rem;
+        padding-bottom: .5rem;
+    }
+
+    .ds-header h2 {
+        margin: 0;
+        letter-spacing: .05em;
+    }
+
+    .ds-subtitle {
+        color: #666;
+        margin: .25rem 0 0;
+    }
+
+    .ds-body p {
+        line-height: 1.6;
+    }
+
+    .ds-library {
+        margin-top: 1rem;
+        display: grid;
+        gap: 1rem;
+    }
+
+    .ds-book {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr auto;
+        gap: 0.75rem 1rem;
+        align-items: start;
+        padding: 0.75rem;
+        border: 1px solid #444;
+        border-radius: 0.5rem;
+    }
+
+    .ds-title {
+        margin: 0 0 .25rem 0;
+        font-size: 1.25rem;
+    }
+
+    .ds-book-media img {
+        display: block;
+        margin-bottom: .5rem;
+    }
+
+    .ds-rank-label {
+        margin-right: .5rem;
+    }
+
+    .ds-rank-select {
+        min-width: 12rem;
+        padding: .4rem .5rem;
+    }
+
+    .ds-actions {
+        margin-top: 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .ds-button {
+        padding: .6rem 1rem;
+        border: 2px solid #222;
+        background: #f3f3f3;
+        border-radius: .5rem;
+        cursor: pointer;
+    }
+
+    .ds-button:hover {
+        background: #e8e8e8;
+    }
+
+    .ds-footnote {
+        color: #555;
+        margin: 0;
+    }
+
+    ol {
+        padding-left: 1.25rem;
+    }
+</style>
+
+{# ---------- JS hook (replace with your actual logic) ---------- 
+<script>
+    document.getElementById('generateRankings')?.addEventListener('click', () => {
+        // Collect rank selections
+        const choices = Array.from(document.querySelectorAll('.ds-rank-select')).map(sel => ({
+            bookId: sel.dataset.bookId,
+            rank: sel.value
+        })).filter(x => x.rank); // only keep selected
+
+        // TODO: POST `choices` to your backend route, e.g. /generate-rank-images
+        // fetch('/generate-rank-images', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ choices })})
+
+        console.log('Chosen ranks:', choices);
+        alert('Stand back, Crawler… the dungeon begins forging your ranking images.');
+    });
+</script>
+#}
+
+{% endblock %}

@@ -1,0 +1,4 @@
+Flask==3.0.3
+audible==0.8.2
+python-dotenv==1.0.1
+requests

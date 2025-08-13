@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="dungeon-404 white" aria-labelledby="mimic-title">
+  <header class="d404-header">
+    <h2 id="mimic-title">SYSTEM ALERT: Mimic Encounter</h2>
+    <p class="d404-subtitle">This is not the page you were looking for.</p>
+  </header>
+
+  <article class="d404-body">
+    <div class="d404-grid">
+      <div class="d404-art">
+        <img
+          src="{{ url_for('static', filename='img/404.png') }}"
+          alt="A ravenous mimic chest waiting in ambush"
+          class="d404-img"
+        />
+      </div>
+      <div class="d404-text">
+        <p><strong>Crawler,</strong> you’ve found a <em>Mimic Chest</em>—its lid wide, its teeth wider.</p>
+        <p>
+          This isn’t treasure. This isn’t even the page you sought. 
+          Best to back away before it adds <em>you</em> to its inventory.
+        </p>
+
+        <div class="d404-actions">
+          <a href="{{ url_for('login') }}" class="btn btn-primary d404-btn">Retreat to Safety (Home)</a>
+          <button type="button" class="btn d404-btn" onclick="history.back()">Backtrack One Room</button>
+        </div>
+
+        <p class="d404-footnote">
+          Error <strong>404</strong> — Passage collapsed or never existed. Try a different route.
+        </p>
+      </div>
+    </div>
+  </article>
+</section>
+
+<style>
+  .dungeon-404 { max-width: 1000px; margin: 2rem auto; padding: 1.5rem; border: 2px solid #333; border-radius: 12px; }
+  .d404-header { border-bottom: 1px dashed #444; margin-bottom: 1rem; padding-bottom: .5rem; }
+  .d404-subtitle { color: #666; margin: .25rem 0 0; }
+  .d404-grid { display: grid; gap: 1.25rem; grid-template-columns: 1fr 1fr; align-items: start; }
+  .d404-img { width: 100%; height: auto; border-radius: .5rem; border: 1px solid #444; }
+  .d404-text p { line-height: 1.6; }
+  .d404-actions { display: flex; gap: .75rem; margin: .75rem 0 0; flex-wrap: wrap; }
+  .d404-btn { border: 2px solid #222; }
+  .d404-footnote { color: #555; margin-top: .75rem; }
+  @media (max-width: 820px) { .d404-grid { grid-template-columns: 1fr; } }
+</style>
+{% endblock %}

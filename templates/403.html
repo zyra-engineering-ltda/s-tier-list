@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="dungeon-err white" aria-labelledby="title-403">
+  <header class="derr-header">
+    <h2 id="title-403">SYSTEM LOCKDOWN: Access Forbidden</h2>
+    <p class="derr-subtitle">Crawler, you are not on the list.</p>
+  </header>
+
+  <article class="derr-body">
+    <div class="derr-grid">
+      <div class="derr-art">
+        <img src="{{ url_for('static', filename='img/403.png') }}"
+             alt="Massive orc in a sharp suit acting as a bouncer under a 'FORBIDDEN' sign" class="derr-img" />
+      </div>
+      <div class="derr-text">
+        <p>
+          A hulking orc bouncer stands before the entrance, arms crossed, tusks gleaming.
+          Behind him, the glowing <strong>FORBIDDEN</strong> sign pulses like a warning rune.
+        </p>
+        <p>
+          <strong>VERDICT:</strong> You do not have clearance to enter this chamber.
+          The orc’s glare suggests arguing will not improve your odds.
+        </p>
+        <p>
+          <strong>ADVICE:</strong> Acquire the proper credentials, bribe the System with a shiny gem, 
+          or retreat before this turns into a strength check you cannot win.
+        </p>
+        <div class="derr-actions">
+          <a href="{{ url_for('login') }}" class="btn btn-primary derr-btn">Return to Home</a>
+          <button class="btn derr-btn" type="button" onclick="history.back()">Backtrack</button>
+        </div>
+        <p class="derr-footnote">Error <strong>403</strong> — The guardians will remember this intrusion attempt.</p>
+      </div>
+    </div>
+  </article>
+</section>
+
+<style>
+  .dungeon-err { max-width: 1000px; margin: 2rem auto; padding: 1.5rem; border: 2px solid #333; border-radius: 12px; }
+  .derr-header { border-bottom: 1px dashed #444; margin-bottom: 1rem; padding-bottom: .5rem; }
+  .derr-subtitle { color: #666; margin: .25rem 0 0; }
+  .derr-grid { display: grid; gap: 1.25rem; grid-template-columns: 1fr 1fr; align-items: start; }
+  .derr-img { width: 100%; height: auto; border-radius: .5rem; border: 1px solid #444; }
+  .derr-text p { line-height: 1.6; }
+  .derr-actions { display: flex; gap: .75rem; margin-top: .75rem; flex-wrap: wrap; }
+  .derr-btn { border: 2px solid #222; }
+  .derr-footnote { color: #555; margin-top: .75rem; }
+  @media (max-width: 820px) { .derr-grid { grid-template-columns: 1fr; } }
+</style>
+{% endblock %}
