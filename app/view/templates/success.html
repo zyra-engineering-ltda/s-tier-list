@@ -54,7 +54,7 @@
             <li>Behold the dungeon’s artistry: a visual tapestry of your Book Rank List.</li>
         </ol>
 
-        <form method="POST" class="ds-form" id="tierForm" novalidate action="{{ url_for('generate_rank_image') }}">
+        <form method="POST" class="ds-form" id="tierForm" novalidate action="{{ url_for('home.generate_rank_image') }}">
         <div class="ds-library" role="region" aria-label="LitRPG Library">
             {# Sort first, then filter inside to keep your original condition semantics #}
             {% for key, value in profile.items() %}
